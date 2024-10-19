@@ -1,0 +1,47 @@
+name: CI/CD
+
+# Trigger the workflow on push or pull request
+# Run on all branches and pull request except gh-pages which has it's own action
+on:
+  push:
+    branches-ignore:
+      - 'gh-pages'
+  pull_request:
+    branches-ignore:
+      - 'gh-pages'
+  release:
+    types: [created]
+
+jobs:
+  # Runs automated test and other checks on the Node.js Code Base
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux, win32, darwin]
+        node-version: [22.x]
+        architecture: [x64]
+        include:
+         - platform: darwin
+           node-version: 22.x
+           architecture: arm64
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Wine and Mono for Windows
+        if: ${{ matrix.platform == 'win32' }}
+        run: sudo dpkg --add-architecture i386 &&
+          sudo apt-get update &&
+          sudo apt-get install wine mono-devel
+      - name: Use Node.js ${{ matrix.node-version }} - ${{ matrix.architecture }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run make -- --platform ${{ matrix.platform }} --arch ${{ matrix.architecture }}
+      - run: npm test --if-present
+      - run: npm run lint --if-present
+      # Only publish if we have a new release
+      - run: npm run publish -- --platform ${{ matrix.platform }} --arch ${{ matrix.architecture }}
+        if: ${{ github.event_name == 'release'}}

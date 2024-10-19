@@ -1,6 +1,6 @@
 {
-  "name": "Grid at a glance",
-  "productName": "Grid at a glance",
+  "name": "grid-at-a-glance",
+  "productName": "grid-at-a-glance",
   "version": "0.1.1",
   "description": "A tray icon showing information about the electrical grid at real time",
   "main": "src/index.js",
