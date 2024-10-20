@@ -1,4 +1,5 @@
 const { net } = require('electron');
+const { logger } = require('./logger');
 
 async function fetchChartData() {
     const response = await net.fetch('https://api.energy-charts.info/signal?country=de');
@@ -6,23 +7,6 @@ async function fetchChartData() {
         const body = await response.json();
         return body;
     }
-}
-
-async function updateTray() {
-    if (process.parentPort) {
-        try {
-            const ret = await fetchChartData();
-            process.parentPort.postMessage(ret);
-        } catch {
-            // Do noting
-        }
-    }
-}
-
-// Child process
-if (process.parentPort) {
-    setImmediate(updateTray)
-    setInterval(updateTray, 1000 * 60 * 60);
 }
 
 module.exports = { fetchChartData }

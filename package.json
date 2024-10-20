@@ -30,6 +30,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
+    "electron-squirrel-startup": "^1.0.1",
+    "pino": "^9.5.0",
+    "pino-pretty": "^11.3.0"
   }
 }
