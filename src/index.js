@@ -9,6 +9,7 @@ const {
     MenuItem,
 } = require('electron');
 const { logger } = require('./logger');
+const { initI18n, i18n, i18next } = require('./i18n');
 const { fetchChartData } = require('./energy-charts');
 
 let tray;
@@ -87,7 +88,7 @@ const createTray = () => {
         tray = new Tray(icon);
 
         stickyChartCheckbox = new MenuItem({
-            label: 'Always show Chart',
+            label: i18next.t('tray.devTools.alwaysShow'),
             type: 'checkbox',
             click: () => {
                 logger.info("Checked " + stickyChartCheckbox.checked);
@@ -96,18 +97,18 @@ const createTray = () => {
         });
         const contextMenu = Menu.buildFromTemplate([
             {
-                label: 'Open energy-charts.info',
+                label: i18next.t('tray.openEnergyCharts'),
                 click: () => {
                     shell.openExternal("https://energy-charts.info/charts/power/chart.htm?l=de&c=DE")
                 }
             },
             { type: 'separator', },
             {
-                label: 'Developer Tools',
+                label: i18next.t('tray.devTools.devTools'),
                 submenu: [
                     stickyChartCheckbox,
                     {
-                        label: 'Open Chrome DevTools',
+                        label: i18next.t('tray.devTools.chromeDevTools'),
                         click: () => {
                             // Open the DevTools.
                             mainWindow.webContents.openDevTools({ mode: 'detach' });
@@ -117,13 +118,13 @@ const createTray = () => {
             },
             { type: 'separator', },
             {
-                label: 'About Grid at a glance',
+                label: i18next.t('tray.about'),
                 click: () => {
                     shell.openExternal("https://github.com/vsaw/grid-at-a-glance")
                 }
             },
             {
-                label: 'Quit',
+                label: i18next.t('tray.quit'),
                 role: 'quit',
                 click: () => {
                     app.quit() // actually quit the app.
@@ -200,12 +201,12 @@ function startBackgroundRefresh() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
-    logger.info('test');
+app.on('ready', async () => {
     if (process.platform === 'darwin') {
         app.dock.hide();
     }
-
+    
+    await initI18n();
     createWindow();
     createTray();
     startBackgroundRefresh();

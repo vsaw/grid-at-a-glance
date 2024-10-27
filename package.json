@@ -31,6 +31,8 @@
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
+    "i18next": "^23.16.4",
+    "i18next-fs-backend": "^2.3.2",
     "pino": "^9.5.0",
     "pino-pretty": "^11.3.0"
   }

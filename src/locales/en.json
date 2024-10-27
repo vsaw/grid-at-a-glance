@@ -1,0 +1,12 @@
+{
+    "tray": {
+        "openEnergyCharts": "Open energy-charts.info",
+        "devTools": {
+            "devTools": "Developer Tools",
+            "alwaysShow": "Always show chart",
+            "chromeDevTools": "Open Chrome Developer Tools"
+        },
+        "about": "About Grid at a glance",
+        "quit": "Quit"
+    }
+}

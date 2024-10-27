@@ -1,0 +1,12 @@
+{
+    "tray": {
+        "openEnergyCharts": "energy-charts.info öffnen",
+        "devTools": {
+            "devTools": "Entwickler Werkzeuge",
+            "alwaysShow": "Chart immer anzeigen",
+            "chromeDevTools": "Chrome Developer Tools öffnen"
+        },
+        "about": "Über Grid at a glance",
+        "quit": "Beenden"
+    }
+}
