@@ -28,4 +28,6 @@ Currently only tested under macOS, but should be working on Windows, Linux and m
 
 ## License
 
-Code shared under [MIT](License.md), except for icons under `src/assets/icons` which are based on [OpenMoji](https://openmoji.org/library/emoji-26A1/#variant=black) and under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+Code shared under [MIT](License.md).
+
+Tray Icons are based on [Feather](https://github.com/feathericons/feather).
