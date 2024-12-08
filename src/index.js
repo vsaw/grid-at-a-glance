@@ -10,7 +10,7 @@ const {
 } = require('electron');
 const { logger } = require('./logger');
 const { initI18n, i18n, i18next } = require('./i18n');
-const { fetchChartData } = require('./energy-charts');
+const { EnergyChartsService } = require('./grid-data-service/energy-charts');
 
 let tray;
 let mainWindow;
@@ -161,28 +161,24 @@ const createTray = () => {
 };
 
 function startBackgroundRefresh() {
-    async function updateTray() {
-        logger.info('fetchChartData');
-        const x = await fetchChartData();
+    const gridService = new EnergyChartsService();
+    gridService.on('gridData', (data) => {
+        logger.info(data, 'data event');
+        
+        // Update Tray Icon
+        updateTrayIcon(data.trafficLight);
+    });
 
-        const now = Date.now() / 1000;
-        let i;
-        for (i = 0; i < x.unix_seconds.length; i++) {
-            if (x.unix_seconds[i] > now) {
-                break;
-            }
-        }
-
+    function updateTrayIcon(trafficLight) {
         let iconName = 'transparent.png';
-        switch (x.signal[i]) {
-            case -1:
-            case 0:
+        switch (trafficLight) {
+            case "RED":
                 iconName = 'red.png';
                 break;
-            case 1:
+            case "YELLOW":
                 iconName = 'yellow.png';
                 break;
-            case 2:
+            case "GREEN":
                 iconName = 'green.png';
                 break;
             default:
@@ -193,9 +189,6 @@ function startBackgroundRefresh() {
         tray.setToolTip("");
         mainWindow.reload();
     }
-
-    setImmediate(updateTray)
-    setInterval(updateTray, 1000 * 60 * 60);
 }
 
 // This method will be called when Electron has finished
