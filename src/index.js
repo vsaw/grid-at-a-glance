@@ -163,8 +163,8 @@ const createTray = () => {
 function startBackgroundRefresh() {
     const gridService = new EnergyChartsService();
     gridService.on('gridData', (data) => {
-        logger.info(data, 'data event');
-        
+        logger.info({ trafficLight: data.trafficLight }, 'data event');
+
         // Update Tray Icon
         updateTrayIcon(data.trafficLight);
     });
@@ -198,7 +198,7 @@ app.on('ready', async () => {
     if (process.platform === 'darwin') {
         app.dock.hide();
     }
-    
+
     await initI18n();
     createWindow();
     createTray();

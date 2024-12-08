@@ -57,6 +57,13 @@ class EnergyChartsService extends BaseService {
 
         const data = new BaseGridData();
         data.trafficLight = trafficLight;
+        data.rawDataToday = responseData.unix_seconds.map((timestamp, index) => {
+            return {
+                timestamp,
+                share: responseData.share[index],
+                trafficLight: responseData.signal[index],
+            }
+        });
         this.emit('gridData', data);
     }
 }
