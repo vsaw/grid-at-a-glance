@@ -7,12 +7,6 @@ const EventEmitter = require('node:events');
  *        service thinks its time to update the grid data. Data is of type BaseGridData.
  */
 class BaseService extends EventEmitter {
-    
-    showPreviewWindow() {
-    }
-
-    hidePreviewWindow() {
-    }
 
     /**
      * Force update a Grid-Data-Service

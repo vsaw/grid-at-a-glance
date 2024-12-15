@@ -16,31 +16,12 @@ let tray;
 let mainWindow;
 let stickyChartCheckbox;
 let showWindow = false;
+let lastGridData;
+let gridService;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
     app.quit();
-}
-
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
-
-function applyCustomChartStyle() {
-    let cssScript = 'document.getElementById("menu").style.display = "none";' +
-        'document.getElementById("steeringContainer").style.display = "none";' +
-        'document.getElementById("inhalt").className = "";' +
-        'document.getElementById("inhalt").style.width = "100%";' +
-        'document.getElementById("inhalt").parentNode.style.margin = "0";' +
-        'document.getElementById("pagetitle").parentNode.style.display = "none";' +
-        'document.getElementsByClassName("forecastsBox")[0].style.display = "none";' +
-        'document.getElementsByClassName("wideContainer")[0].style.padding = "0";' +
-        'document.getElementsByClassName("currentTrafficLight")[0].style.display = "none";' +
-        'document.getElementById("explanationBox").parentNode.style.display = "none";' +
-        'document.getElementById("footer").style.display = "none";'
-    mainWindow.webContents.executeJavaScript(cssScript, true);
 }
 
 const createWindow = () => {
@@ -58,11 +39,7 @@ const createWindow = () => {
     mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
 
     // and load the index.html of the app.
-    // mainWindow.loadFile(path.join(__dirname, 'index.html'));
-    mainWindow.loadURL("https://energy-charts.info/charts/consumption_advice/chart.htm?l=de&c=DE");
-    mainWindow.webContents.on('did-finish-load', () => {
-        applyCustomChartStyle();
-    });
+    mainWindow.loadFile(path.join(__dirname, 'index.html'));
     mainWindow.webContents.on('input-event', (e, inputEvent) => {
         if (inputEvent.type == 'mouseMove') {
             showWindow = true;
@@ -73,13 +50,16 @@ const createWindow = () => {
                 if (stickyChartCheckbox.checked) {
                     return;
                 }
-                if(showWindow) {
+                if (showWindow) {
                     return;
                 }
                 mainWindow.hide();
             }, 50);
         }
-    })
+    });
+    mainWindow.webContents.on('dom-ready', () => {
+        mainWindow.webContents.send('updateBaseGridData', lastGridData);
+    });
 };
 
 const createTray = () => {
@@ -113,6 +93,13 @@ const createTray = () => {
                             // Open the DevTools.
                             mainWindow.webContents.openDevTools({ mode: 'detach' });
                         }
+                    },
+                    {
+                        label: i18next.t('tray.devTools.refresh'),
+                        click: () => {
+                            mainWindow.webContents.reload();
+                            gridService.update();
+                        }
                     }
                 ]
             },
@@ -139,7 +126,6 @@ const createTray = () => {
             if (mainWindow.isVisible()) {
                 return;
             }
-            applyCustomChartStyle();
             const bounds = tray.getBounds();
             mainWindow.setPosition(bounds.x, bounds.y + bounds.height);
             mainWindow.showInactive();
@@ -154,6 +140,9 @@ const createTray = () => {
                     return;
                 }
 
+                if(mainWindow.isDestroyed()) {
+                    return;
+                }
                 mainWindow.hide();
             }, 50);
         });
@@ -161,12 +150,17 @@ const createTray = () => {
 };
 
 function startBackgroundRefresh() {
-    const gridService = new EnergyChartsService();
+    gridService = new EnergyChartsService();
     gridService.on('gridData', (data) => {
-        logger.info({ trafficLight: data.trafficLight }, 'data event');
+        logger.info({ trafficLight: data.gridDataNow.trafficLight }, 'data event');
 
         // Update Tray Icon
-        updateTrayIcon(data.trafficLight);
+        updateTrayIcon(data.gridDataNow.trafficLight);
+        lastGridData = data;
+        if(!mainWindow.isDestroyed()) {
+            logger.info(lastGridData.gridDataNow.timestamp, "updateBaseGridData - startBackgroundRefresh");
+            mainWindow.webContents.send('updateBaseGridData', data);
+        }
     });
 
     function updateTrayIcon(trafficLight) {
