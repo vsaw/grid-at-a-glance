@@ -1,11 +1,122 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Grid at a glance</title>
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
-    <iframe src="https://energy-charts.info/charts/consumption_advice/chart.htm?l=de&c=DE">
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Grid at a glance</title>
+  <link rel="stylesheet" href="index.css" />
+  <script src="lib/date-fns.4.1.0.min.js"></script>
+  <script src="lib/chart.4.4.7.umd.min.js"></script>
+  <script src="lib/chartjs-adapter-date-fns.3.0.0.min.js"></script>
+  <script src="lib/chartjs-plugin-annotation.3.1.0.min.js"></script>
+</head>
+
+<body>
+  <div width="100%" heigth="100%" style="padding: 1em;">
+    <canvas id="myChart" width="100%" heigth="100%"></canvas>
+  </div>
+  <script>
+    const ctx = document.getElementById('myChart');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          data: [],
+          borderWidth: 5,
+          borderColor: 'rgb(0,0,0)',
+          fill: 'origin',
+          pointStyle: false,
+          segment: {
+            borderColor: ctx => {
+              // TODO: Better colors
+              if (ctx.p0.parsed.y >= 60) {
+                return 'rgb(0,255,0)'
+              } else if (ctx.p0.parsed.y >= 40) {
+                return 'rgb(0,0,255)'
+              } else {
+                return 'rgb(255,0,0)'
+              }
+            },
+            backgroundColor: ctx => {
+              if (ctx.p0.parsed.y >= 60) {
+                return 'rgb(0,255,0,0.5)'
+              } else if (ctx.p0.parsed.y >= 40) {
+                return 'rgb(0,0,255,0.5)'
+              } else {
+                return 'rgb(255,0,0,0.5)'
+              }
+            },
+          },
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            title: {
+              display: false,
+            },
+          },
+          y: {
+            beginAtZero: true,
+            min: 0,
+            suggestedMax: 100,
+            ticks: {
+              // Include a dollar sign in the ticks
+              callback: function (value, index, ticks) {
+                return value + ' %';
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                let label = ctx.dataset.label || '';
+                if (ctx.parsed.y !== null) {
+                  label += Math.round(ctx.parsed.y) + ' %'
+                }
+                return label;
+              }
+            }
+          },
+          annotation: {
+            annotations: {
+              line1: {
+                type: 'line',
+                borderColor: 'rgb(0, 0, 0, 0.5)',
+                borderDash: [1, 1],
+                borderWidth: 1,
+                scaleID: 'x',
+                // value: new Date(),
+              }
+            }
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'nearest',
+          axis: 'x',
+        },
+        animation: {
+          duration: 0,
+        }
+      }
+    });
+
+    window.electronAPI.onUpdateBaseGridData((value) => {
+      console.log(value);
+      chart.data.labels = value.gridDataToday.map(d => d.timestamp);
+      chart.data.datasets[0].data = value.gridDataToday.map(d => d.share * 100);
+      chart.options.plugins.annotation.annotations.line1.value = new Date();
+      chart.update();
+    });
+  </script>
+</body>
+
 </html>

@@ -4,7 +4,8 @@
         "devTools": {
             "devTools": "Developer Tools",
             "alwaysShow": "Always show chart",
-            "chromeDevTools": "Open Chrome Developer Tools"
+            "chromeDevTools": "Open Chrome Developer Tools",
+            "refresh": "Refresh"
         },
         "about": "About Grid at a glance",
         "quit": "Quit"

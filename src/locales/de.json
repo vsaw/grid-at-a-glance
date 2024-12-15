@@ -4,7 +4,8 @@
         "devTools": {
             "devTools": "Entwickler Werkzeuge",
             "alwaysShow": "Chart immer anzeigen",
-            "chromeDevTools": "Chrome Developer Tools öffnen"
+            "chromeDevTools": "Chrome Developer Tools öffnen",
+            "refresh": "Aktualisieren"
         },
         "about": "Über Grid at a glance",
         "quit": "Beenden"
