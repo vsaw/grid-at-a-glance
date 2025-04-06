@@ -31,9 +31,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Wine and Mono for Windows
         if: ${{ matrix.platform == 'win32' }}
+        # FIXME: Work around missing wine64 binary as suggested in
+        # https://github.com/electron/forge/issues/3778
         run: sudo dpkg --add-architecture i386 &&
           sudo apt-get update &&
-          sudo apt-get install wine mono-devel
+          sudo apt-get install wine wine64 mono-complete &&
+          sudo ln -s /usr/bin/wine /usr/bin/wine64
       - name: Use Node.js ${{ matrix.node-version }} - ${{ matrix.architecture }}
         uses: actions/setup-node@v4
         with:
