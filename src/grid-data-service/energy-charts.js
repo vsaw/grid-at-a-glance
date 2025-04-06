@@ -74,6 +74,8 @@ class EnergyChartsService extends BaseService {
             return this.#toBaseGridData(timestamp,
                 responseData.share[index],
                 responseData.signal[index]);
+        }).filter(d => {
+            return d.timestamp.getDate() === new Date().getDate();
         });
         this.emit('gridData', data);
     }
