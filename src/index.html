@@ -63,7 +63,7 @@
             min: 0,
             suggestedMax: 100,
             ticks: {
-              // Include a dollar sign in the ticks
+              // Include a % sign in the ticks
               callback: function (value, index, ticks) {
                 return value + ' %';
               }
@@ -93,7 +93,6 @@
                 borderDash: [1, 1],
                 borderWidth: 1,
                 scaleID: 'x',
-                // value: new Date(),
               }
             }
           }
@@ -109,8 +108,13 @@
       }
     });
 
+    // Move the "now" indicator every 60 seconds
+    setInterval(() => {
+      chart.options.plugins.annotation.annotations.line1.value = new Date();
+      chart.update();
+    }, 1000 * 60);
+
     window.electronAPI.onUpdateBaseGridData((value) => {
-      console.log(value);
       chart.data.labels = value.gridDataToday.map(d => d.timestamp);
       chart.data.datasets[0].data = value.gridDataToday.map(d => d.share * 100);
       chart.options.plugins.annotation.annotations.line1.value = new Date();
