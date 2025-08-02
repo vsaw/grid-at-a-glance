@@ -29,22 +29,25 @@
           pointStyle: false,
           segment: {
             borderColor: ctx => {
-              // TODO: Better colors
-              if (ctx.p0.parsed.y >= 60) {
-                return 'rgb(0,255,0)'
+              if (ctx.p0.parsed.y >= 100) {
+                return 'rgb(0,102,255)';
+              } else if (ctx.p0.parsed.y >= 60) {
+                return 'rgb(0,255,0)';
               } else if (ctx.p0.parsed.y >= 40) {
-                return 'rgb(255,166,46)'
+                return 'rgb(255,166,46)';
               } else {
-                return 'rgb(255,0,0)'
+                return 'rgb(255,0,0)';
               }
             },
             backgroundColor: ctx => {
-              if (ctx.p0.parsed.y >= 60) {
-                return 'rgb(0,255,0,0.5)'
+              if (ctx.p0.parsed.y >= 100) {
+                return 'rgb(0,102,255,0.5)';
+              } else if (ctx.p0.parsed.y >= 60) {
+                return 'rgb(0,255,0,0.5)';
               } else if (ctx.p0.parsed.y >= 40) {
-                return 'rgb(255,166,46,0.5)'
+                return 'rgb(255,166,46,0.5)';
               } else {
-                return 'rgb(255,0,0,0.5)'
+                return 'rgb(255,0,0,0.5)';
               }
             },
           },
