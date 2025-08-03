@@ -19,6 +19,20 @@ class EnergyChartsService extends BaseService {
         }
         setInterval(updateSync, timeoutMillisSafe, this);
         setImmediate(updateSync, this);
+
+        // Add timer to call updateSync every day at midnight
+        const now = new Date();
+        const nextMidnight = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() + 1,
+            0, 0, 0, 0
+        );
+        const msUntilMidnight = nextMidnight - now;
+        setTimeout((self) => {
+            updateSync(self);
+            setInterval(updateSync, 24 * 60 * 60 * 1000, self);
+        }, msUntilMidnight, this);
     }
 
     async update() {
