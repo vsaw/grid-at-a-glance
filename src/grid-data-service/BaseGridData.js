@@ -8,6 +8,7 @@ class BaseGridData {
         /**
          * Traffic light at the time. Possible Values are
          * 
+         *   - "BLUE" (if renewables >= 100%)
          *   - "GREEN"
          *   - "YELLOW"
          *   - "RED"

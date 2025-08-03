@@ -175,6 +175,9 @@ function startBackgroundRefresh() {
             case "GREEN":
                 iconName = 'green.png';
                 break;
+            case "BLUE":
+                iconName = 'blue.png';
+                break;
             default:
                 break;
         }
