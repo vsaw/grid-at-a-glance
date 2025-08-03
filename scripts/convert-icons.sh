@@ -14,6 +14,7 @@ convert_all_sizes () {
     rsvg-convert --page-width=256 --page-height=256 --width 160 --top 48 --left 48 $INPUT_FILE > $OUT_FOLDER/$FILE_NAME@8x.png
 }
 
+convert_all_sizes $REPO_ROOT/src/assets/icons/blue.svg
 convert_all_sizes $REPO_ROOT/src/assets/icons/green.svg
 convert_all_sizes $REPO_ROOT/src/assets/icons/red.svg
 convert_all_sizes $REPO_ROOT/src/assets/icons/yellow.svg

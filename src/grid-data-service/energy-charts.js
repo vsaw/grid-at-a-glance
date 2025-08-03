@@ -60,10 +60,11 @@ class EnergyChartsService extends BaseService {
 
     #toBaseGridData(timestamp, share, signal) {
         const d = new Date(timestamp * 1000);
+        const sharePercent = share / 100;
         return {
             timestamp: d,
-            share: share / 100,
-            trafficLight: this.#trafficLightNumberToName(signal),
+            share: sharePercent,
+            trafficLight: sharePercent  >= 1 ? "BLUE" : this.#trafficLightNumberToName(signal),
         }
     }
 
