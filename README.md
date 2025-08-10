@@ -25,7 +25,13 @@ Download the latest release from [GitHub](https://github.com/vsaw/grid-at-a-glan
 
 Grid at a glance is built on [ElectronJS](https://www.electronjs.org/).
 
-Currently only tested under macOS, but should be working on Windows, Linux and macOS (Intel + Apple Silicon).
+Currently only tested under macOS Intel, but should be working on Windows, Linux and macOS (Intel + Apple Silicon).
+
+Required tools for Icon conversions
+
+- imagemagick
+- rsvg-convert
+- iconutil
 
 ## License
 

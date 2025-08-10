@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgb(0,0,0)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+  <!--Zap-->
+  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="url(#gradient-fill)"/>
+  
+  <!--outer subtle rounded square to suggest an app icon boundary-->
+  <rect x="1" y="1" width="22" height="22" rx="1" ry="1" stroke-width="1"/>
+  
+  <defs>
+    <linearGradient id="gradient-fill" x1="0" y1="24" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.3" stop-color="#ff0000"/>
+      <stop offset="0.4" stop-color="#ffa62e"/>
+      <stop offset="0.6" stop-color="#00ff00"/>
+      <stop offset="0.7" stop-color="rgb(0,102,255)"/>
+    </linearGradient>
+  </defs>
+</svg>
