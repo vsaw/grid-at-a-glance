@@ -9,7 +9,8 @@ The Data is taken from https://energy-charts.info via their public API.
 ## Features
 
 - Shows the current share of renewable electricity in the German grid
-  - 🟢 >60%
+  - 🔵 >= 100%
+  - 🟢 61% - 99%
   - 🟡 40% - 60%
   - 🔴 <40%
 - Hover over the icon to see the chart for today
